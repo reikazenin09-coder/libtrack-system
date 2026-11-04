@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Borrower Portal — Libtrack</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="../assets/image/icp.png" alt="ICP logo">
+        <div><strong>Libtrack</strong><span>Borrower Portal</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="overview" type="button">Overview</button>
+        <button class="nav-item" data-view="catalog" type="button">Book Catalog</button>
+        <button class="nav-item" data-view="loans" type="button">My Borrowings</button>
+        <a class="nav-item" href="/">Homepage</a>
+      </nav>
+      <button id="logoutButton" class="logout" type="button">Log out</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">Immaculate Conception Polytechnic</p><h1 id="pageTitle">Borrower overview</h1></div>
+        <div class="topbar-actions">
+          <button id="myQrButton" class="secondary scan-top-button" type="button">My QR</button>
+          <div class="user-chip"><div id="avatar" class="avatar">S</div><div><strong id="userName">Borrower</strong><span id="userMeta">Account</span></div></div>
+        </div>
+      </header>
+
+      <section id="overviewView" class="view active">
+        <div id="statsGrid" class="stats-grid"></div>
+        <div class="panel-grid">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">Current loans</p><h2>Books to return</h2></div><button class="text-button" data-open-view="loans" type="button">View all</button></div>
+            <div id="activePreview" class="compact-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">Quick access</p><h2>Find a book</h2></div><button class="text-button" data-open-view="catalog" type="button">Open catalog</button></div>
+            <p style="color:var(--muted);line-height:1.65">Search by title, author, accession number, or category. Availability updates immediately after every borrow or return.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="catalogView" class="view">
+        <div class="toolbar three">
+          <input id="catalogSearch" type="search" placeholder="Search title, author, category, accession number...">
+          <select id="catalogCategory"><option value="">All categories</option></select>
+          <button id="scanBookButton" class="primary" type="button">▣ Scan book QR</button>
+        </div>
+        <div id="catalogGrid" class="catalog-grid"></div>
+        <div id="catalogEmpty" class="panel empty hidden">No books match your search.</div>
+      </section>
+
+      <section id="loansView" class="view">
+        <div class="toolbar two">
+          <input id="loanSearch" type="search" placeholder="Search borrowed books...">
+          <select id="loanStatus">
+            <option value="all">All records</option>
+            <option value="borrowed">Currently borrowed</option>
+            <option value="overdue">Overdue</option>
+            <option value="returned">Returned</option>
+          </select>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Book</th><th>Borrowed</th><th>Due date</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="loansTableBody"></tbody>
+            </table>
+          </div>
+          <div id="loansEmpty" class="empty hidden">No borrowing records found.</div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="qrModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card qr-modal-card">
+      <div class="modal-head"><div><p class="eyebrow">Your LibTrack identity</p><h2 id="qrModalTitle">My QR code</h2></div><button class="icon-button close-modal" data-modal="qrModal" type="button">×</button></div>
+      <p id="qrModalDetail" class="qr-detail"></p>
+      <div id="qrCode" class="qr-code-box"></div>
+      <p class="qr-hint">Present this QR at the library counter for entry monitoring and QR-assisted transactions.</p>
+      <div class="modal-actions"><button class="secondary close-modal" data-modal="qrModal" type="button">Close</button><button id="downloadQrButton" class="primary" type="button">Download QR</button></div>
+    </div>
+  </div>
+
+  <div id="bookScannerModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card scanner-card">
+      <div class="modal-head"><div><p class="eyebrow">Book QR scanner</p><h2>Scan to borrow</h2></div><button class="icon-button close-book-scanner" type="button">×</button></div>
+      <div class="scanner-stage">
+        <div id="bookQrReader"></div>
+        <div class="scanner-frame" aria-hidden="true"><span></span></div>
+      </div>
+      <div id="bookScanProgress" class="scan-progress"><strong>Ready to scan</strong><span>Point the camera at a LibTrack book QR code.</span></div>
+      <div class="manual-scan">
+        <input id="manualBookQrCode" placeholder="Or paste a LibTrack book QR value here">
+        <button id="processManualBookQrButton" class="secondary" type="button">Process code</button>
+      </div>
+      <p id="bookScannerMessage" class="message"></p>
+      <div class="modal-actions"><button id="stopBookScannerButton" class="secondary" type="button">Stop camera</button><button id="startBookScannerButton" class="primary" type="button">Start camera</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="../shared.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

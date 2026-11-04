@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libtrack — ICP Library System</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body class="landing">
+  <nav class="landing-nav">
+    <a class="landing-brand" href="/">
+      <img src="assets/image/icp.png" alt="ICP ogo">
+      <div><strong>Libtrack</strong><div>ICP Library System</div></div>
+    </a>
+    <div class="landing-actions">
+      <a id="portalLink" class="outline-link hidden" href="#">Open portal</a>
+      <a id="loginLink" class="light-link" href="login/login.html">Log in</a>
+      <button id="logoutButton" class="outline-link hidden" type="button">Log out</button>
+    </div>
+  </nav>
+
+  <main class="landing-hero">
+    <section>
+      <p class="eyebrow" style="color:#bcd6ff">Immaculate Conception Polytechnic</p>
+      <h1>Library records without the paper chase.</h1>
+      <p>Libtrack manages books, student accounts, borrowing records, returns, due dates, and library inventory in one connected system.</p>
+      <div class="hero-buttons">
+        <a id="startLink" class="light-link" href="login/login.html">Enter Libtrack</a>
+        <a class="outline-link" href="#features">See features</a>
+      </div>
+    </section>
+
+    <aside id="features" class="hero-card">
+      <h2>Working features</h2>
+      <div class="feature-list">
+        <div class="feature"><strong>Student portal</strong><br>Search the catalog, borrow books, return books, and see history.</div>
+        <div class="feature"><strong>Librarian portal</strong><br>Manage books, students, transactions, due dates, and overdue records.</div>
+        <div class="feature"><strong>Connected database</strong><br>Every transaction automatically updates available copies.</div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="shared.js"></script>
+  <script>
+    'use strict';
+    const user = getStoredUser();
+    if (getToken() && user) {
+      const destination = user.role === 'librarian' ? '/librarian/dashboard.html' : '/student/dashboard.html';
+      document.getElementById('portalLink').href = destination;
+      document.getElementById('portalLink').classList.remove('hidden');
+      document.getElementById('startLink').href = destination;
+      document.getElementById('startLink').textContent = 'Open my portal';
+      document.getElementById('loginLink').classList.add('hidden');
+      document.getElementById('logoutButton').classList.remove('hidden');
+      document.getElementById('logoutButton').addEventListener('click', logout);
+    }
+  </script>
+</body>
+</html>

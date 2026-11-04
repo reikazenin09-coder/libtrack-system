@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in — Libtrack</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body class="auth-page">
+  <section class="auth-image">
+    <div><h1>Welcome to Libtrack</h1><p>ICP's connected library borrowing and inventory system.</p></div>
+  </section>
+  <main class="auth-panel">
+    <div class="auth-card">
+      <a class="auth-logo" href="/"><img src="../assets/image/icp.png" alt="ICP logo"><div><strong>Libtrack</strong><br><span>ICP Library System</span></div></a>
+      <h2>Log in</h2>
+      <p>Use your student, teacher, or librarian account.</p>
+      <form id="loginForm" class="auth-form" autocomplete="off">
+        <label>Username<input id="username" name="libtrack_username" autocomplete="off" autocapitalize="none" spellcheck="false" required maxlength="50"></label>
+        <label>Password<input id="password" name="libtrack_password" type="password" autocomplete="new-password" required></label>
+        <p id="loginMessage" class="message"></p>
+        <button id="loginButton" class="primary" type="submit">Log in</button>
+      </form>
+    </div>
+  </main>
+  <script src="../shared.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

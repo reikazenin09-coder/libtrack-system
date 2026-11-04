@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Librarian Portal — Libtrack</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css">
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="../assets/image/icp.png" alt="ICP logo">
+        <div><strong>Libtrack</strong><span>Librarian Portal</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="overview" type="button">Overview</button>
+        <button class="nav-item" data-view="books" type="button">Book Management</button>
+        <button class="nav-item" data-view="borrowings" type="button">Borrowing Records</button>
+        <button class="nav-item" data-view="entries" type="button">QR & Entry Logs</button>
+        <button class="nav-item" data-view="users" type="button">Users Accounts</button>
+        <a class="nav-item" href="/">Homepage</a>
+      </nav>
+      <button id="logoutButton" class="logout" type="button">Log out</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">Immaculate Conception Polytechnic</p><h1 id="pageTitle">Library overview</h1></div>
+        <div class="topbar-actions">
+          <button id="quickScanButton" class="secondary scan-top-button" type="button">▣ Scan QR</button>
+          <div class="user-chip"><div id="avatar" class="avatar">L</div><div><strong id="userName">Librarian</strong><span>Administrator</span></div></div>
+        </div>
+      </header>
+
+      <section id="overviewView" class="view active">
+        <div id="statsGrid" class="stats-grid"></div>
+        <div class="panel-grid">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">Inventory</p><h2>Availability by category</h2></div><button class="text-button" data-open-view="books" type="button">Manage books</button></div>
+            <div id="availabilitySummary" class="availability"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">Attention</p><h2>Overdue items</h2></div><button class="text-button" data-open-view="borrowings" type="button">View records</button></div>
+            <div id="overduePreview" class="compact-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">QR entry monitoring</p><h2>Recent library entries</h2></div><button class="text-button" data-open-view="entries" type="button">View logs</button></div>
+            <div id="recentEntriesPreview" class="compact-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="booksView" class="view">
+        <div class="toolbar four">
+          <select id="bookCategoryFilter"><option value="">All categories</option></select>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" id="showArchivedBooks"> View Archived
+          </label>
+          <button id="exportBooksButton" class="secondary" type="button">Export inventory</button>
+          <button id="addBookButton" class="primary" type="button">+ Add book</button>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table id="booksTable" class="display">
+              <thead><tr><th>Book</th><th>Accession</th><th>Category</th><th>Copies</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="booksTableBody"></tbody>
+            </table>
+          </div>
+          <div id="booksEmpty" class="empty hidden">No books match the selected filter.</div>
+        </article>
+      </section>
+
+      <section id="borrowingsView" class="view">
+        <div class="toolbar four">
+          <select id="borrowingStatusFilter">
+            <option value="all">All records</option>
+            <option value="borrowed">Currently borrowed</option>
+            <option value="overdue">Overdue</option>
+            <option value="returned">Returned</option>
+          </select>
+          <select id="borrowingCategoryFilter"><option value="">All categories</option></select>
+          <button id="exportBorrowingsButton" class="secondary" type="button">Export records</button>
+          <button id="newCheckoutButton" class="primary" type="button">+ New checkout</button>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table id="borrowingsTable" class="display">
+              <thead><tr><th>Borrower</th><th>Book</th><th>Borrowed</th><th>Due date</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="borrowingsTableBody"></tbody>
+            </table>
+          </div>
+          <div id="borrowingsEmpty" class="empty hidden">No borrowing records found.</div>
+        </article>
+      </section>
+
+      <section id="entriesView" class="view">
+        <div class="toolbar four">
+          <input id="entryDateFilter" type="date" title="Filter by date">
+          <button id="exportEntriesButton" class="secondary" type="button">Export entry logs</button>
+          <button id="systemQrButton" class="secondary" type="button">System access QR</button>
+          <button id="openScannerButton" class="primary" type="button">▣ Scan QR</button>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table id="entriesTable" class="display">
+              <thead><tr><th>User</th><th>ID number</th><th>Section / Department</th><th>Role</th><th>Entry time</th><th>Recorded by</th></tr></thead>
+              <tbody id="entriesTableBody"></tbody>
+            </table>
+          </div>
+          <div id="entriesEmpty" class="empty hidden">No library entry records found.</div>
+        </article>
+      </section>
+
+      <section id="usersView" class="view">
+        <div class="toolbar four">
+          <select id="userRoleFilter">
+            <option value="all">Students & teachers</option>
+            <option value="student">Students only</option>
+            <option value="teacher">Teachers only</option>
+          </select>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" id="showArchivedUsers"> View Archived
+          </label>
+          <button id="exportUsersButton" class="secondary" type="button">Export users</button>
+          <button id="addUserButton" class="primary" type="button">+ Add user</button>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table id="usersTable" class="display">
+              <thead><tr><th>User</th><th>Username</th><th>ID number</th><th>Section / Department</th><th>Role</th><th>Borrowings</th><th>Actions</th></tr></thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+          <div id="usersEmpty" class="empty hidden">No user accounts found.</div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="bookModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">Inventory form</p><h2 id="bookModalTitle">Add book</h2></div><button class="icon-button close-modal" data-modal="bookModal" type="button">×</button></div>
+      <form id="bookForm" class="form-stack">
+        <input id="bookId" type="hidden">
+        <label>Accession number<input id="accessionNumber" required maxlength="50" placeholder="e.g. ICP-2026-001"></label>
+        <label>Book title<input id="bookTitle" required maxlength="200"></label>
+        <div class="form-grid">
+          <label>Author<input id="bookAuthor" maxlength="150"></label>
+          <label>Category<input id="bookCategory" required maxlength="80"></label>
+        </div>
+        <label>Total copies<input id="totalCopies" type="number" min="1" step="1" required value="1"></label>
+        <p id="bookFormMessage" class="message"></p>
+        <div class="modal-actions"><button class="secondary close-modal" data-modal="bookModal" type="button">Cancel</button><button class="primary" type="submit">Save book</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="userModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">Account form</p><h2 id="userModalTitle">Add user</h2></div><button class="icon-button close-modal" data-modal="userModal" type="button">×</button></div>
+      <form id="userForm" class="form-stack">
+        <input id="userId" type="hidden">
+        <div class="form-grid">
+          <label>Account type
+            <select id="userRole" required>
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+            </select>
+          </label>
+          <label>Full name<input id="accountFullName" required maxlength="120"></label>
+        </div>
+        <div class="form-grid">
+          <label>ID number<input id="accountIdNumber" required maxlength="50" placeholder="Student no. or teacher ID"></label>
+          <label>Section / Department<input id="accountSection" required maxlength="80" placeholder="e.g. ICT 12-1 or ICT Department"></label>
+        </div>
+        <div class="form-grid">
+          <label>Username<input id="accountUsername" required maxlength="50"></label>
+          <label><span id="passwordLabel">Password</span><input id="accountPassword" type="password" minlength="6" autocomplete="new-password"></label>
+        </div>
+        <p style="margin:0;color:var(--muted);font-size:12px">Teachers use the same borrower portal as students. When editing, leave the password blank to keep the current password.</p>
+        <p id="userFormMessage" class="message"></p>
+        <div class="modal-actions"><button class="secondary close-modal" data-modal="userModal" type="button">Cancel</button><button class="primary" type="submit">Save user</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="checkoutModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">Borrowing transaction</p><h2>New checkout</h2></div><button class="icon-button close-modal" data-modal="checkoutModal" type="button">×</button></div>
+      <form id="checkoutForm" class="form-stack">
+        <label>Borrower<select id="checkoutUser" required><option value="">Select a student or teacher</option></select></label>
+        <label>Available book<select id="checkoutBook" required><option value="">Select a book</option></select></label>
+        <label>Borrow date<input id="checkoutDate" type="date" required></label>
+        <p id="checkoutFormMessage" class="message"></p>
+        <div class="modal-actions"><button class="secondary close-modal" data-modal="checkoutModal" type="button">Cancel</button><button class="primary" type="submit">Save checkout</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="qrModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card qr-modal-card">
+      <div class="modal-head"><div><p class="eyebrow">LibTrack QR</p><h2 id="qrModalTitle">QR code</h2></div><button class="icon-button close-modal" data-modal="qrModal" type="button">×</button></div>
+      <p id="qrModalDetail" class="qr-detail"></p>
+      <div id="qrCode" class="qr-code-box"></div>
+      <p class="qr-hint">This code can be scanned by the LibTrack QR scanner. Keep account QR codes private.</p>
+      <div class="modal-actions"><button class="secondary close-modal" data-modal="qrModal" type="button">Close</button><button id="downloadQrButton" class="primary" type="button">Download QR</button></div>
+    </div>
+  </div>
+
+  <div id="scannerModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card scanner-card">
+      <div class="modal-head"><div><p class="eyebrow">QR transaction center</p><h2>Scan with camera</h2></div><button class="icon-button close-scanner" type="button">×</button></div>
+      <div class="scanner-mode-grid">
+        <button class="scanner-mode active" data-scan-mode="entry" type="button"><strong>Library entry</strong><span>Scan a student or teacher QR</span></button>
+        <button class="scanner-mode" data-scan-mode="checkout" type="button"><strong>Checkout</strong><span>Scan user, then book</span></button>
+        <button class="scanner-mode" data-scan-mode="return" type="button"><strong>Return</strong><span>Scan user, then book</span></button>
+      </div>
+      <div class="scanner-stage">
+        <div id="qrReader"></div>
+        <div class="scanner-frame" aria-hidden="true"><span></span></div>
+      </div>
+      <div id="scanProgress" class="scan-progress"><strong>Ready to scan</strong><span>Select a mode and allow camera access.</span></div>
+      <div class="manual-scan">
+        <input id="manualQrCode" placeholder="Or paste a LibTrack QR value here">
+        <button id="processManualQrButton" class="secondary" type="button">Process code</button>
+      </div>
+      <p id="scannerMessage" class="message"></p>
+      <div class="modal-actions"><button id="resetScanButton" class="secondary" type="button">Reset</button><button id="stopScannerButton" class="secondary" type="button">Stop camera</button><button id="startScannerButton" class="primary" type="button">Start camera</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="../shared.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
