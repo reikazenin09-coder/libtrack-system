@@ -17,6 +17,7 @@ const pool = mysql.createPool({
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'root',
   database: process.env.DB_NAME || 'libtrack_db',
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -964,6 +965,18 @@ app.get('/api/librarian/entries', requireAuth, requireRole('librarian'), asyncRo
   res.json({ entries: rows });
 }));
 
+// TEMPORARY: shows which DB variables the live app can see. DELETE after testing.
+app.get('/api/debug-env', (_req, res) => {
+  res.json({
+    DB_HOST: process.env.DB_HOST ? 'set' : 'MISSING',
+    DB_PORT: process.env.DB_PORT || 'MISSING',
+    DB_USER: process.env.DB_USER ? 'set' : 'MISSING',
+    DB_PASSWORD: process.env.DB_PASSWORD ? 'set' : 'MISSING',
+    DB_NAME: process.env.DB_NAME || 'MISSING',
+    DB_SSL: process.env.DB_SSL || 'MISSING'
+  });
+});
+
 app.use('/api', (_req, res) => {
   res.status(404).json({ message: 'API route not found.' });
 });
@@ -999,7 +1012,5 @@ async function start() {
     process.exitCode = 1;
   }
 }
-
-module.exports = app;
 
 start();
