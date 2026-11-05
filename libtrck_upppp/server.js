@@ -1000,4 +1000,6 @@ async function start() {
   }
 }
 
+module.exports = app;
+
 start();
