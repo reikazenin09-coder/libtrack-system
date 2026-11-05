@@ -15,8 +15,4 @@
     "mysql2": "^3.9.7",
     "qrcode": "^1.5.3"
   }
-
-  {
-    "rewrites": [{ "source": "/(.*)", "destination": "/server.js" }]
-  }
 }
